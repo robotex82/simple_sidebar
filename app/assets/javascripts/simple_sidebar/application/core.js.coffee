@@ -9,12 +9,12 @@
 #         </button>
 #       </div>
 #       <aside
-#         id="example-sidebar">
+#         id="example-sidebar"
 #         data-sidebar-load="/de/backend/authentifizierung/user_sidebar.html"
 #         data-sidebar-mode="overlay"
 #         data-sidebar-position="right"
 #         data-sidebar-size="20rem"
-#         data-sidebar-state="closed"
+#         data-sidebar-state="closed">
 #         <h3>Hello from the example sidebar!</h3>
 #       </aside>
 #     </body>
@@ -30,75 +30,99 @@
 #  size: size that the sidebar will take up (width for left and right, height for top and bottom). Pass any css size in px, rem or whatever you like.
 #
 $ ->
-  $('body').on 'click', '#sidebar-modal-background', ->
-    target = $("##{$(@).data('sidebar-target')}")
-    closeModal(target)
+  initializeSidebars = ->
+    $('[data-sidebar-position]').each (_, e) ->
+      # add css classes
+      position = $(@).data('sidebar-position')
+      mode = $(@).data('sidebar-mode')
+      size = $(@).data('sidebar-size')
+      $(e).addClass("sidebar sidebar-#{position} sidebar-#{mode}")
 
-  $('[data-sidebar-position]').each (_, e) ->
-    position = $(@).data('sidebar-position')
-    $(e).addClass("sidebar sidebar-#{position}")
-    if $(@).data('sidebar-state') == 'opened'
-      openModal($(@))
+      # set correct size
+      if position in ['top', 'bottom']
+        $(e).outerHeight(size)
+      else
+        $(e).outerWidth(size)
 
-  $('[data-sidebar-trigger]').on 'click', ->
-    target = $($(@).data('sidebar-trigger'))
-    state = target.data('sidebar-state')
+      # position outside of viewport
+      outer_width = $(e).outerWidth()
+      $(e).css(position, "-#{outer_width}px")
+
+      # display it
+      $(e).css("display", "inherit")
+
+  initializeSidebars()
+
+  initializeModalBackground = ->
+    $('body').on 'click', '#sidebar-modal-background', ->
+      target = $("##{$(@).data('sidebar-target')}")
+      closeSidebar(target)
+
+  initializeModalBackground()
+
+  initializeTriggers = ->
+    $('[data-sidebar-trigger]').on 'click', ->
+      target = $($(@).data('sidebar-trigger'))
+      state = target.data('sidebar-state')
+
+      if state == 'closed'
+        openSidebar(target)
+      else
+        closeSidebar(target)
+
+  initializeTriggers()
+
+  openSidebar = (target) ->
+    main_content = $('#main-content')
+
+    position = target.data('sidebar-position')
+    mode = target.data('sidebar-mode')
+    size = target.data('sidebar-size')
+
+    # Move sidebar into viewport
+    target.css(position, 0)
+
+    # Add margin equal to sidebar width/height to main content to make room
+    # for the sidebar if in push mode
+    main_content.css("margin-#{position}", size) if mode == 'push'
+
+
+    # add modal if in modal mode
+    if mode == 'modal'
+      $("body").append("<div id=\"sidebar-modal-background\" data-sidebar-target=\"#{target.attr('id')}\"></div>")
+      $('#sidebar-modal-background').fadeIn()
+
+    # load content via ajay if the load option was given
+    if target.data('sidebar-load')
+      url = target.data('sidebar-load')
+      $.ajax
+        type: 'GET'
+        url: url
+        success: (response) ->
+          $(target).html(response)
+          return
+
+    # set state
+    target.data('sidebar-state', 'opened')
+
+  closeSidebar = (target) ->
+    main_content = $('#main-content')
+
+    position = target.data('sidebar-position')
+    mode = target.data('sidebar-mode')
+    size_attribute = if position in ['top', 'bottom'] then 'height' else 'width'
+    size = target.data('sidebar-size')
     
-    if state == 'closed'
-      openModal(target)
-    else
-      closeModal(target)
+    # push
+    if mode == 'push'
+      # main_content.css("margin-#{position}", size)
+      main_content.css("margin-#{position}", '0px')
 
-openModal = (target) ->
-  main_content = $('#main-content')
+    # modal
+    if mode == 'modal'
+      $("#sidebar-modal-background").remove()
 
-  position = target.data('sidebar-position')
-  mode = target.data('sidebar-mode')
-  size_attribute = if position in ['top', 'bottom'] then 'height' else 'width'
-  size = target.data('sidebar-size')
+    target.css(position, "-#{target.outerWidth()}px")
 
-  target.css("display", "inherit")
-  target.css(size_attribute, size)
-  main_content.css("margin-#{position}", size) if mode == 'push'
-
-
-  # modal
-  if mode == 'modal'
-    $("body").append("<div id=\"sidebar-modal-background\" data-sidebar-target=\"#{target.attr('id')}\"></div>")
-
-  # load
-  if target.data('sidebar-load')
-    url = target.data('sidebar-load')
-    $.ajax
-      type: 'GET'
-      url: url
-      success: (response) ->
-        $(target).html(response)
-        return
-
-  # set state
-  target.data('sidebar-state', 'opened')
-
-closeModal = (target) ->
-  main_content = $('#main-content')
-
-  position = target.data('sidebar-position')
-  mode = target.data('sidebar-mode')
-  size_attribute = if position in ['top', 'bottom'] then 'height' else 'width'
-  size = target.data('sidebar-size')
-  
-  # push
-  if mode == 'push'
-    main_content.css("margin-#{position}", size)
-
-  # modal
-  if mode == 'modal'
-    $("#sidebar-modal-background").remove()
-
-  target.css(size_attribute, '0px')
-
-  if mode == 'push'
-    main_content.css("margin-#{position}", '0px')
-
-  # set state
-  target.data('sidebar-state', 'closed')
+    # set state
+    target.data('sidebar-state', 'closed')

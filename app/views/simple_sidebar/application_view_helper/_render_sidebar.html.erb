@@ -4,6 +4,6 @@
   data-sidebar-mode="<%= options[:mode] %>"
   data-sidebar-position="<%= options[:position] %>"
   data-sidebar-size="<%= options[:size] %>"
-  data-sidebar-state="<%= options[:state] %>">
+  data-sidebar-state="<%= options[:state] %>" <%= options[:container_html].collect { |k,v| "#{k}=\"#{v}\"" }.join(' ').html_safe %>>
   <%= capture(&block) %>
 </aside>
