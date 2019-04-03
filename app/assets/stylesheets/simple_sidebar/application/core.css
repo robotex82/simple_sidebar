@@ -16,11 +16,13 @@
   height: 100%;
   top: 0;
   transition: left .5s;
+  overflow-y: auto;
 }
 .sidebar-right {
   height: 100%;
   top: 0;
   transition: right .5s;
+  overflow-y: auto;
 }
 .sidebar-top {
   width: 100%;
