@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    simple_sidebar (0.0.1.pre)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  simple_sidebar!
+
+BUNDLED WITH
+   1.16.2
