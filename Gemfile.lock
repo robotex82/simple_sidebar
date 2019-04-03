@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_sidebar (0.0.1.pre)
+    simple_sidebar (0.0.3.pre)
       coffee-rails
       rails (>= 5.0.0)
       rao-view_helper (>= 0.0.17.pre)
