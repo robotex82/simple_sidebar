@@ -15,29 +15,23 @@
 .sidebar-left {
   height: 100%;
   top: 0;
-  transition: left .5s;
   overflow-y: auto;
 }
 .sidebar-right {
   height: 100%;
   top: 0;
-  transition: right .5s;
   overflow-y: auto;
 }
 .sidebar-top {
   width: 100%;
   left: 0;
-  transition: top .5s;
 }
 .sidebar-bottom {
   width: 100%;
   left: 0;
-  transition: bottom .5s;
 }
 
-#main-content {
-  transition: margin .5s;
-}
+#main-content {}
 
 #sidebar-modal-background {
   display: none;

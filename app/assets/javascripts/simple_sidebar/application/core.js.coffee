@@ -28,6 +28,7 @@
 #     modal: Like overlay, but with a modal background.
 #  position: left|right|top|bottom
 #  size: size that the sidebar will take up (width for left and right, height for top and bottom). Pass any css size in px, rem or whatever you like.
+#  state: open|closed
 #
 $ ->
   initializeSidebars = ->
@@ -36,6 +37,8 @@ $ ->
       position = $(@).data('sidebar-position')
       mode = $(@).data('sidebar-mode')
       size = $(@).data('sidebar-size')
+      state = $(@).data('sidebar-state')
+
       $(e).addClass("sidebar sidebar-#{position} sidebar-#{mode}")
 
       # set correct size
@@ -51,14 +54,16 @@ $ ->
       # display it
       $(e).css("display", "inherit")
 
-  initializeSidebars()
+      # set initial state
+      if state == 'open'
+        openSidebar($(@), false)
+
 
   initializeModalBackground = ->
     $('body').on 'click', '#sidebar-modal-background', ->
       target = $("##{$(@).data('sidebar-target')}")
       closeSidebar(target)
 
-  initializeModalBackground()
 
   initializeTriggers = ->
     $('[data-sidebar-trigger]').on 'click', ->
@@ -66,13 +71,12 @@ $ ->
       state = target.data('sidebar-state')
 
       if state == 'closed'
-        openSidebar(target)
+        openSidebar(target, true)
       else
-        closeSidebar(target)
+        closeSidebar(target, true)
 
-  initializeTriggers()
 
-  openSidebar = (target) ->
+  openSidebar = (target, animate = false) ->
     main_content = $('#main-content')
 
     position = target.data('sidebar-position')
@@ -80,12 +84,17 @@ $ ->
     size = target.data('sidebar-size')
 
     # Move sidebar into viewport
-    target.css(position, 0)
+    if(animate == true)
+      target.animate({ "#{position}": 0 }, 500);
+    else
+      target.css(position, 0)
 
     # Add margin equal to sidebar width/height to main content to make room
     # for the sidebar if in push mode
-    main_content.css("margin-#{position}", size) if mode == 'push'
-
+    if(animate == true)
+      main_content.animate({ "margin-#{position}": size }, 500);
+    else
+      main_content.css("margin-#{position}", size) if mode == 'push'
 
     # add modal if in modal mode
     if mode == 'modal'
@@ -103,9 +112,9 @@ $ ->
           return
 
     # set state
-    target.data('sidebar-state', 'opened')
+    target.data('sidebar-state', 'open')
 
-  closeSidebar = (target) ->
+  closeSidebar = (target, animate = false) ->
     main_content = $('#main-content')
 
     position = target.data('sidebar-position')
@@ -115,14 +124,23 @@ $ ->
     
     # push
     if mode == 'push'
-      # main_content.css("margin-#{position}", size)
-      main_content.css("margin-#{position}", '0px')
+      if(animate == true)
+        main_content.animate({ 'marginLeft': 0 }, 500);
+      else
+        main_content.css("margin-#{position}", '0px')
 
     # modal
     if mode == 'modal'
       $("#sidebar-modal-background").remove()
 
-    target.css(position, "-#{target.outerWidth()}px")
+    if(animate == true)
+     target.animate({ "#{position}": "-#{target.outerWidth()}px" }, 500);
+    else
+      target.css(position, "-#{target.outerWidth()}px")
 
     # set state
     target.data('sidebar-state', 'closed')
+
+  initializeSidebars()
+  initializeModalBackground()
+  initializeTriggers()

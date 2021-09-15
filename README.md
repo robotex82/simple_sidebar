@@ -118,6 +118,7 @@ Put all the content that is not in the sidebar in a container with the id #main-
   * modal: Like overlay, but with a modal background.
 * position: left|right|top|bottom
 * size: size that the sidebar will take up (width for left and right, height for top and bottom). Pass any css size in px, rem or whatever you like.
+* state: open|closed
 
 ## License
 
