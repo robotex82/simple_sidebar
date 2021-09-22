@@ -91,17 +91,18 @@ $ ->
 
     # Add margin equal to sidebar width/height to main content to make room
     # for the sidebar if in push mode
-    if(animate == true)
-      main_content.animate({ "margin-#{position}": size }, 500);
-    else
-      main_content.css("margin-#{position}", size) if mode == 'push'
+    if(mode == 'push')
+      if(animate == true)
+        main_content.animate({ "margin-#{position}": size }, 500)
+      else
+        main_content.css("margin-#{position}", size)
 
     # add modal if in modal mode
     if mode == 'modal'
       $("body").append("<div id=\"sidebar-modal-background\" data-sidebar-target=\"#{target.attr('id')}\"></div>")
       $('#sidebar-modal-background').fadeIn()
 
-    # load content via ajay if the load option was given
+    # load content via ajax if the load option was given
     if target.data('sidebar-load')
       url = target.data('sidebar-load')
       $.ajax
