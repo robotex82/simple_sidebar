@@ -44,6 +44,7 @@ class SimpleSidebar {
     this.setSize();
     this.positionOffScreen();
     this.showElement();
+    this.addInlineStyles(); // Add basic inline styles as fallback
     
     if (this.state === 'open') {
       this.open(false);
@@ -52,6 +53,38 @@ class SimpleSidebar {
 
   addCSSClasses() {
     this.element.classList.add('sidebar', `sidebar-${this.position}`, `sidebar-${this.mode}`);
+  }
+
+  addInlineStyles() {
+    // Add basic inline styles as fallback in case CSS isn't loading
+    this.element.style.backgroundColor = '#ffffff';
+    this.element.style.color = '#333333';
+    this.element.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+    this.element.style.zIndex = '3000';
+    this.element.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    this.element.style.padding = '1rem';
+    this.element.style.boxSizing = 'border-box';
+    
+    // Position-specific styles
+    if (this.position === 'left' || this.position === 'right') {
+      this.element.style.height = '100vh';
+      this.element.style.top = '0';
+      if (this.position === 'left') {
+        this.element.style.borderRight = '1px solid #e0e0e0';
+      } else {
+        this.element.style.borderLeft = '1px solid #e0e0e0';
+      }
+      this.element.style.overflowY = 'auto';
+    } else if (this.position === 'top' || this.position === 'bottom') {
+      this.element.style.width = '100vw';
+      this.element.style.left = '0';
+      if (this.position === 'top') {
+        this.element.style.borderBottom = '1px solid #e0e0e0';
+      } else {
+        this.element.style.borderTop = '1px solid #e0e0e0';
+      }
+      this.element.style.overflowX = 'auto';
+    }
   }
 
   setSize() {
@@ -267,6 +300,14 @@ class SimpleSidebar {
     this.modalBackground.id = 'sidebar-modal-background';
     this.modalBackground.dataset.sidebarTarget = this.element.id;
     this.modalBackground.style.display = 'none';
+    this.modalBackground.style.position = 'fixed';
+    this.modalBackground.style.zIndex = '2000';
+    this.modalBackground.style.left = '0';
+    this.modalBackground.style.top = '0';
+    this.modalBackground.style.width = '100%';
+    this.modalBackground.style.height = '100%';
+    this.modalBackground.style.background = 'rgba(0, 0, 0, 0.4)';
+    this.modalBackground.style.cursor = 'pointer';
     
     document.body.appendChild(this.modalBackground);
     

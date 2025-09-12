@@ -14,6 +14,7 @@ module SimpleSidebar
       app.config.assets.precompile += %w[
         simple_sidebar/application.js
         simple_sidebar/application.css
+        simple_sidebar.css
       ] if app.config.respond_to?(:assets)
     end
   end
