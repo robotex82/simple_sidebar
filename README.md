@@ -1,16 +1,12 @@
 # SimpleSidebar
 
+A modern, lightweight sidebar component for Rails 8+ applications using Propshaft and importmaps. Built with vanilla JavaScript (no jQuery dependency).
+
 ## Prerequisites
 
-You need jQuery. The simplest way is to add it from the cdn:
-
-    # app/views/layouts/application.html.erb
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <script crossorigin="anonymous" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      </head>
-    </html>
+- Rails 8.0+
+- Propshaft (default in Rails 8)
+- Importmaps (default in Rails 8)
 
 ## Installation
 
@@ -23,26 +19,26 @@ Bundle:
 
     > bundle install
 
-Add the assets to your application:
+Add the JavaScript to your application:
 
-    # app/assets/javascripts/application.js
-    //= require simple_sidebar'
+    # app/javascript/application.js
+    import "simple_sidebar"
+
+Add the CSS to your application:
 
     # app/assets/stylesheets/application.css
-    *= require simple_sidebar'
-    *= require simple_sidebar/default_theme' # <- This is optional
+    @import "simple_sidebar";
 
 Add the view helper to your application:
 
     # app/controllers/application_controller.rb
-    class ApplicationController < AcitonController::Base
+    class ApplicationController < ActionController::Base
       view_helper SimpleSidebar::ApplicationViewHelper, as: :simple_sidebar_helper
     end
 
 ## Usage
 
 Adding a sidebar:
-
 
 This will add a sidebar on the left in push mode and add some custom html to the
 sidebar container:
@@ -88,7 +84,7 @@ This will render a sidebar to the bottom in modal mode:
       <button data-sidebar-trigger="#sidebar4">Close me</button>
     <% end %>
 
-## Usage with pure html
+## Usage with pure HTML
 
 Put all the content that is not in the sidebar in a container with the id #main-content a trigger button and add a sidebar.
 
@@ -99,12 +95,12 @@ Put all the content that is not in the sidebar in a container with the id #main-
         </button>
       </div>
       <aside
-        id="example-sidebar">
+        id="example-sidebar"
         data-sidebar-load="/de/backend/authentifizierung/user_sidebar.html"
         data-sidebar-mode="overlay"
         data-sidebar-position="right"
         data-sidebar-size="20rem"
-        data-sidebar-state="closed"
+        data-sidebar-state="closed">
         <h3>Hello from the example sidebar!</h3>
       </aside>
     </body>
@@ -119,6 +115,15 @@ Put all the content that is not in the sidebar in a container with the id #main-
 * position: left|right|top|bottom
 * size: size that the sidebar will take up (width for left and right, height for top and bottom). Pass any css size in px, rem or whatever you like.
 * state: open|closed
+
+## Features
+
+- **Modern JavaScript**: Built with vanilla JavaScript, no jQuery dependency
+- **Smooth Animations**: CSS transitions and requestAnimationFrame for smooth sidebar animations
+- **Multiple Modes**: Support for push, overlay, and modal sidebar modes
+- **Flexible Positioning**: Sidebars can be positioned on left, right, top, or bottom
+- **AJAX Loading**: Dynamic content loading via fetch API
+- **Rails 8 Compatible**: Works seamlessly with Propshaft and importmaps
 
 ## License
 

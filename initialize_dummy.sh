@@ -33,11 +33,23 @@ cd spec/dummy
 # Remove .ruby-version
 rm .ruby-version
 
+# Add gem to Gemfile
+cat >> Gemfile << 'EOF'
+gem "simple_sidebar", path: "../../../"
+EOF
+
 # Run bundle install
 bundle install
 
 # install importmaps
 bin/rails importmap:install
+rm config/initializers/assets.rb
+
+# Add simple_sidebar to importmap
+echo 'pin "simple_sidebar", to: "simple_sidebar/application.js"' >> config/importmap.rb
+
+# Add simple_sidebar import to application.js
+echo 'import "simple_sidebar"' >> app/javascript/application.js
 
 # install turbo-rails
 bin/rails turbo:install
@@ -46,3 +58,9 @@ bin/rails turbo:install
 rails generate controller Home index
 mkdir -p app/views/home
 cp ../setup/app/views/home/index.html.erb app/views/home/index.html.erb
+
+# Add root to: "home#index" to config/routes.rb before end
+sed -i '/^end$/i root to: "home#index"' config/routes.rb
+
+# Install simple_sidebar
+bin/rails g simple_sidebar:install
