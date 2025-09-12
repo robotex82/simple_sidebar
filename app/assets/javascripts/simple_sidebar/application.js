@@ -26,12 +26,22 @@ class SimpleSidebar {
    * @param {HTMLElement} element - The sidebar element
    */
   constructor(element) {
+    console.log('🔧 SimpleSidebar constructor called for:', element.id);
     this.element = element;
     this.position = element.dataset.sidebarPosition;
     this.mode = element.dataset.sidebarMode || 'overlay';
     this.size = element.dataset.sidebarSize || '300px';
     this.state = element.dataset.sidebarState || 'closed';
     this.loadUrl = element.dataset.sidebarLoad;
+    
+    console.log('📊 Sidebar config:', {
+      id: element.id,
+      position: this.position,
+      mode: this.mode,
+      size: this.size,
+      state: this.state,
+      loadUrl: this.loadUrl
+    });
     
     this.mainContent = document.getElementById('main-content');
     this.modalBackground = null;
@@ -40,80 +50,139 @@ class SimpleSidebar {
   }
 
   init() {
+    console.log('🚀 SimpleSidebar init() called for:', this.element.id);
+    
+    // Start with sidebar completely hidden
+    console.log('👻 Setting display: none for:', this.element.id);
+    this.element.style.display = 'none';
+    
     this.addCSSClasses();
     this.setSize();
+    this.addInlineStyles();
     this.positionOffScreen();
-    this.showElement();
-    this.addInlineStyles(); // Add basic inline styles as fallback
     
+    // Only show if it should be open initially
     if (this.state === 'open') {
+      console.log('🔓 Opening sidebar immediately for:', this.element.id);
       this.open(false);
+    } else {
+      // Show the element but keep it positioned off-screen
+      console.log('👁️ Making sidebar visible but off-screen for:', this.element.id);
+      this.element.style.display = 'inherit';
+      
+      // Force the positioning again after making visible to override any CSS
+      setTimeout(() => {
+        console.log('🔄 Re-applying off-screen positioning for:', this.element.id);
+        this.positionOffScreen();
+      }, 0);
+      
+      console.log('📍 Current position after init:', {
+        left: this.element.style.left,
+        right: this.element.style.right,
+        top: this.element.style.top,
+        bottom: this.element.style.bottom,
+        display: this.element.style.display
+      });
     }
   }
 
   addCSSClasses() {
+    console.log('🎨 Adding CSS classes for:', this.element.id);
     this.element.classList.add('sidebar', `sidebar-${this.position}`, `sidebar-${this.mode}`);
+    console.log('✅ CSS classes added:', this.element.className);
   }
 
   addInlineStyles() {
+    console.log('💅 Adding inline styles for:', this.element.id);
     // Add basic inline styles as fallback in case CSS isn't loading
-    this.element.style.backgroundColor = '#ffffff';
-    this.element.style.color = '#333333';
-    this.element.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-    this.element.style.zIndex = '3000';
-    this.element.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-    this.element.style.padding = '1rem';
-    this.element.style.boxSizing = 'border-box';
+    // Use !important to override any CSS
+    this.element.style.setProperty('background-color', '#ffffff', 'important');
+    this.element.style.setProperty('color', '#333333', 'important');
+    this.element.style.setProperty('box-shadow', '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', 'important');
+    this.element.style.setProperty('z-index', '3000', 'important');
+    this.element.style.setProperty('transition', 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 'important');
+    this.element.style.setProperty('padding', '1rem', 'important');
+    this.element.style.setProperty('box-sizing', 'border-box', 'important');
+    this.element.style.setProperty('position', 'fixed', 'important');
     
     // Position-specific styles
     if (this.position === 'left' || this.position === 'right') {
-      this.element.style.height = '100vh';
-      this.element.style.top = '0';
+      this.element.style.setProperty('height', '100vh', 'important');
+      this.element.style.setProperty('top', '0', 'important');
       if (this.position === 'left') {
-        this.element.style.borderRight = '1px solid #e0e0e0';
+        this.element.style.setProperty('border-right', '1px solid #e0e0e0', 'important');
       } else {
-        this.element.style.borderLeft = '1px solid #e0e0e0';
+        this.element.style.setProperty('border-left', '1px solid #e0e0e0', 'important');
       }
-      this.element.style.overflowY = 'auto';
+      this.element.style.setProperty('overflow-y', 'auto', 'important');
     } else if (this.position === 'top' || this.position === 'bottom') {
-      this.element.style.width = '100vw';
-      this.element.style.left = '0';
+      this.element.style.setProperty('width', '100vw', 'important');
+      this.element.style.setProperty('left', '0', 'important');
       if (this.position === 'top') {
-        this.element.style.borderBottom = '1px solid #e0e0e0';
+        this.element.style.setProperty('border-bottom', '1px solid #e0e0e0', 'important');
       } else {
-        this.element.style.borderTop = '1px solid #e0e0e0';
+        this.element.style.setProperty('border-top', '1px solid #e0e0e0', 'important');
       }
-      this.element.style.overflowX = 'auto';
+      this.element.style.setProperty('overflow-x', 'auto', 'important');
     }
+    console.log('✅ Inline styles applied for:', this.element.id);
   }
 
   setSize() {
+    console.log('📏 Setting size for:', this.element.id, 'size:', this.size);
     if (['top', 'bottom'].includes(this.position)) {
-      this.element.style.height = this.size;
+      this.element.style.setProperty('height', this.size, 'important');
+      console.log('📐 Set height to:', this.size);
     } else {
-      this.element.style.width = this.size;
+      this.element.style.setProperty('width', this.size, 'important');
+      console.log('📐 Set width to:', this.size);
     }
   }
 
   positionOffScreen() {
-    const rect = this.element.getBoundingClientRect();
-    const outerWidth = rect.width;
+    console.log('📍 Positioning off-screen for:', this.element.id);
+    // Use a more reliable method to position off-screen
+    // Force a reflow to ensure dimensions are calculated
+    this.element.offsetHeight;
     
+    const rect = this.element.getBoundingClientRect();
+    const width = rect.width || this.parseSize(this.size);
+    const height = rect.height || this.parseSize(this.size);
+    
+    console.log('📊 Element dimensions:', {
+      rectWidth: rect.width,
+      rectHeight: rect.height,
+      parsedWidth: width,
+      parsedHeight: height,
+      size: this.size
+    });
+    
+    // Position off-screen with a large negative value to ensure it's hidden
+    // Use setProperty with !important to override CSS
     if (this.position === 'left') {
-      this.element.style.left = `-${outerWidth}px`;
+      const leftValue = `-${width + 200}px`;
+      this.element.style.setProperty('left', leftValue, 'important');
+      console.log('⬅️ Positioned left sidebar at:', leftValue);
     } else if (this.position === 'right') {
-      this.element.style.right = `-${outerWidth}px`;
+      const rightValue = `-${width + 200}px`;
+      this.element.style.setProperty('right', rightValue, 'important');
+      console.log('➡️ Positioned right sidebar at:', rightValue);
     } else if (this.position === 'top') {
-      const outerHeight = rect.height;
-      this.element.style.top = `-${outerHeight}px`;
+      const topValue = `-${height + 200}px`;
+      this.element.style.setProperty('top', topValue, 'important');
+      console.log('⬆️ Positioned top sidebar at:', topValue);
     } else if (this.position === 'bottom') {
-      const outerHeight = rect.height;
-      this.element.style.bottom = `-${outerHeight}px`;
+      const bottomValue = `-${height + 200}px`;
+      this.element.style.setProperty('bottom', bottomValue, 'important');
+      console.log('⬇️ Positioned bottom sidebar at:', bottomValue);
     }
-  }
-
-  showElement() {
-    this.element.style.display = 'inherit';
+    
+    console.log('📍 Final position after off-screen positioning:', {
+      left: this.element.style.left,
+      right: this.element.style.right,
+      top: this.element.style.top,
+      bottom: this.element.style.bottom
+    });
   }
 
   /**
@@ -121,15 +190,24 @@ class SimpleSidebar {
    * @param {boolean} [animate=false] - Whether to animate the opening
    */
   open(animate = false) {
+    console.log('🔓 Opening sidebar:', this.element.id, 'animate:', animate);
+    
+    // Make sure element is visible
+    this.element.style.display = 'inherit';
+    console.log('👁️ Set display to inherit for:', this.element.id);
+    
     // Move sidebar into viewport
     if (animate) {
+      console.log('🎬 Animating to position 0 for:', this.element.id);
       this.animateToPosition(0);
     } else {
+      console.log('⚡ Instantly setting position to 0 for:', this.element.id);
       this.setPosition(0);
     }
 
     // Add margin to main content for push mode
     if (this.mode === 'push') {
+      console.log('📦 Push mode: adjusting main content margin for:', this.element.id);
       if (animate) {
         this.animateMainContentMargin(this.size);
       } else {
@@ -139,15 +217,18 @@ class SimpleSidebar {
 
     // Add modal background if in modal mode
     if (this.mode === 'modal') {
+      console.log('🖼️ Modal mode: creating background for:', this.element.id);
       this.createModalBackground();
     }
 
     // Load content via fetch if URL provided
     if (this.loadUrl) {
+      console.log('📥 Loading content from URL for:', this.element.id, 'URL:', this.loadUrl);
       this.loadContent();
     }
 
     this.setState('open');
+    console.log('✅ Sidebar opened:', this.element.id);
   }
 
   /**
@@ -155,8 +236,11 @@ class SimpleSidebar {
    * @param {boolean} [animate=false] - Whether to animate the closing
    */
   close(animate = false) {
+    console.log('🔒 Closing sidebar:', this.element.id, 'animate:', animate);
+    
     // Reset main content margin for push mode
     if (this.mode === 'push') {
+      console.log('📦 Push mode: resetting main content margin for:', this.element.id);
       if (animate) {
         this.animateMainContentMargin('0px');
       } else {
@@ -166,6 +250,7 @@ class SimpleSidebar {
 
     // Remove modal background
     if (this.mode === 'modal') {
+      console.log('🖼️ Modal mode: removing background for:', this.element.id);
       this.removeModalBackground();
     }
 
@@ -173,12 +258,15 @@ class SimpleSidebar {
     if (animate) {
       const rect = this.element.getBoundingClientRect();
       const outerWidth = rect.width;
+      console.log('🎬 Animating off-screen for:', this.element.id, 'width:', outerWidth);
       this.animateToPosition(-outerWidth);
     } else {
+      console.log('⚡ Instantly positioning off-screen for:', this.element.id);
       this.positionOffScreen();
     }
 
     this.setState('closed');
+    console.log('✅ Sidebar closed:', this.element.id);
   }
 
   /**
@@ -186,6 +274,7 @@ class SimpleSidebar {
    * @param {boolean} [animate=true] - Whether to animate the transition
    */
   toggle(animate = true) {
+    console.log('🔄 Toggling sidebar:', this.element.id, 'current state:', this.state, 'animate:', animate);
     if (this.state === 'closed') {
       this.open(animate);
     } else {
@@ -194,18 +283,24 @@ class SimpleSidebar {
   }
 
   setPosition(value) {
+    console.log('📍 Setting position for:', this.element.id, 'value:', value, 'position:', this.position);
     if (this.position === 'left') {
-      this.element.style.left = `${value}px`;
+      this.element.style.setProperty('left', `${value}px`, 'important');
+      console.log('⬅️ Set left to:', `${value}px`);
     } else if (this.position === 'right') {
-      this.element.style.right = `${value}px`;
+      this.element.style.setProperty('right', `${value}px`, 'important');
+      console.log('➡️ Set right to:', `${value}px`);
     } else if (this.position === 'top') {
-      this.element.style.top = `${value}px`;
+      this.element.style.setProperty('top', `${value}px`, 'important');
+      console.log('⬆️ Set top to:', `${value}px`);
     } else if (this.position === 'bottom') {
-      this.element.style.bottom = `${value}px`;
+      this.element.style.setProperty('bottom', `${value}px`, 'important');
+      console.log('⬇️ Set bottom to:', `${value}px`);
     }
   }
 
   animateToPosition(value) {
+    console.log('🎬 Starting animation for:', this.element.id, 'to value:', value);
     const startTime = performance.now();
     const duration = 500;
     const startValue = this.getCurrentPosition();
@@ -222,6 +317,8 @@ class SimpleSidebar {
 
       if (progress < 1) {
         requestAnimationFrame(animate);
+      } else {
+        console.log('🎬 Animation completed for:', this.element.id);
       }
     };
 
@@ -230,26 +327,36 @@ class SimpleSidebar {
 
   getCurrentPosition() {
     const rect = this.element.getBoundingClientRect();
+    let position = 0;
     if (this.position === 'left') {
-      return rect.left;
+      position = rect.left;
     } else if (this.position === 'right') {
-      return window.innerWidth - rect.right;
+      position = window.innerWidth - rect.right;
     } else if (this.position === 'top') {
-      return rect.top;
+      position = rect.top;
     } else if (this.position === 'bottom') {
-      return window.innerHeight - rect.bottom;
+      position = window.innerHeight - rect.bottom;
     }
-    return 0;
+    console.log('📍 Current position for:', this.element.id, 'position:', position);
+    return position;
   }
 
   setMainContentMargin(value) {
+    console.log('📦 Setting main content margin for:', this.element.id, 'value:', value, 'position:', this.position);
     if (this.mainContent) {
       this.mainContent.style[`margin-${this.position}`] = value;
+      console.log('✅ Set margin-', this.position, 'to:', value);
+    } else {
+      console.log('❌ No main content element found');
     }
   }
 
   animateMainContentMargin(value) {
-    if (!this.mainContent) return;
+    console.log('🎬 Animating main content margin for:', this.element.id, 'to value:', value);
+    if (!this.mainContent) {
+      console.log('❌ No main content element found for animation');
+      return;
+    }
 
     const startTime = performance.now();
     const duration = 500;
@@ -267,6 +374,8 @@ class SimpleSidebar {
 
       if (progress < 1) {
         requestAnimationFrame(animate);
+      } else {
+        console.log('🎬 Main content margin animation completed for:', this.element.id);
       }
     };
 
@@ -274,28 +383,42 @@ class SimpleSidebar {
   }
 
   getMainContentMargin() {
-    if (!this.mainContent) return 0;
+    if (!this.mainContent) {
+      console.log('❌ No main content element found for margin calculation');
+      return 0;
+    }
     const computedStyle = window.getComputedStyle(this.mainContent);
     const marginValue = computedStyle[`margin-${this.position}`];
-    return this.parseSize(marginValue);
+    const parsed = this.parseSize(marginValue);
+    console.log('📊 Main content margin for:', this.element.id, 'raw:', marginValue, 'parsed:', parsed);
+    return parsed;
   }
 
   parseSize(size) {
-    if (typeof size === 'number') return size;
+    console.log('🔢 Parsing size:', size);
+    if (typeof size === 'number') {
+      console.log('✅ Size is already a number:', size);
+      return size;
+    }
     if (typeof size === 'string') {
       const match = size.match(/^([\d.]+)(.*)$/);
       if (match) {
         const value = parseFloat(match[1]);
         const unit = match[2];
-        if (unit === 'px') return value;
-        if (unit === 'rem') return value * 16; // Assume 16px base font size
-        if (unit === 'em') return value * 16;
+        let result = value;
+        if (unit === 'px') result = value;
+        else if (unit === 'rem') result = value * 16; // Assume 16px base font size
+        else if (unit === 'em') result = value * 16;
+        console.log('✅ Parsed size:', size, '→', result, 'px');
+        return result;
       }
     }
+    console.log('❌ Could not parse size:', size, 'returning 0');
     return 0;
   }
 
   createModalBackground() {
+    console.log('🖼️ Creating modal background for:', this.element.id);
     this.modalBackground = document.createElement('div');
     this.modalBackground.id = 'sidebar-modal-background';
     this.modalBackground.dataset.sidebarTarget = this.element.id;
@@ -310,6 +433,7 @@ class SimpleSidebar {
     this.modalBackground.style.cursor = 'pointer';
     
     document.body.appendChild(this.modalBackground);
+    console.log('✅ Modal background created and appended for:', this.element.id);
     
     // Fade in
     this.modalBackground.style.display = 'block';
@@ -318,10 +442,12 @@ class SimpleSidebar {
     requestAnimationFrame(() => {
       this.modalBackground.style.transition = 'opacity 0.3s ease';
       this.modalBackground.style.opacity = '1';
+      console.log('🎬 Modal background fade-in started for:', this.element.id);
     });
   }
 
   removeModalBackground() {
+    console.log('🗑️ Removing modal background for:', this.element.id);
     if (this.modalBackground) {
       this.modalBackground.style.transition = 'opacity 0.3s ease';
       this.modalBackground.style.opacity = '0';
@@ -330,13 +456,18 @@ class SimpleSidebar {
         if (this.modalBackground && this.modalBackground.parentNode) {
           this.modalBackground.parentNode.removeChild(this.modalBackground);
           this.modalBackground = null;
+          console.log('✅ Modal background removed for:', this.element.id);
         }
       }, 300);
     }
   }
 
   async loadContent() {
-    if (!this.loadUrl) return;
+    console.log('📥 Loading content for:', this.element.id, 'URL:', this.loadUrl);
+    if (!this.loadUrl) {
+      console.log('❌ No load URL provided for:', this.element.id);
+      return;
+    }
 
     try {
       const response = await fetch(this.loadUrl, {
@@ -350,17 +481,20 @@ class SimpleSidebar {
       if (response.ok) {
         const content = await response.text();
         this.element.innerHTML = content;
+        console.log('✅ Content loaded successfully for:', this.element.id);
       } else {
-        console.error('Failed to load sidebar content:', response.status);
+        console.error('❌ Failed to load sidebar content for:', this.element.id, 'status:', response.status);
       }
     } catch (error) {
-      console.error('Error loading sidebar content:', error);
+      console.error('❌ Error loading sidebar content for:', this.element.id, 'error:', error);
     }
   }
 
   setState(state) {
+    console.log('🔄 Setting state for:', this.element.id, 'from:', this.state, 'to:', state);
     this.state = state;
     this.element.dataset.sidebarState = state;
+    console.log('✅ State updated for:', this.element.id);
   }
 }
 
@@ -370,42 +504,56 @@ class SimpleSidebar {
  */
 class SimpleSidebarManager {
   constructor() {
+    console.log('🏗️ SimpleSidebarManager constructor called');
     this.sidebars = new Map();
     this.init();
   }
 
   init() {
+    console.log('🚀 SimpleSidebarManager init() called');
     this.initializeSidebars();
     this.initializeTriggers();
     this.initializeModalBackground();
+    console.log('✅ SimpleSidebarManager initialized with', this.sidebars.size, 'sidebars');
   }
 
   initializeSidebars() {
+    console.log('🔍 Looking for sidebar elements...');
     const sidebarElements = document.querySelectorAll('[data-sidebar-position]');
+    console.log('📋 Found', sidebarElements.length, 'sidebar elements:', Array.from(sidebarElements).map(el => el.id));
     
     sidebarElements.forEach(element => {
+      console.log('🔧 Initializing sidebar element:', element.id);
       const sidebar = new SimpleSidebar(element);
       this.sidebars.set(element.id, sidebar);
+      console.log('✅ Sidebar initialized and added to manager:', element.id);
     });
   }
 
   initializeTriggers() {
+    console.log('🎯 Setting up trigger event listeners...');
     document.addEventListener('click', (event) => {
       const trigger = event.target.closest('[data-sidebar-trigger]');
       if (!trigger) return;
 
+      console.log('🖱️ Trigger clicked:', trigger, 'target:', trigger.dataset.sidebarTrigger);
       const targetId = trigger.dataset.sidebarTrigger;
       const targetElement = document.querySelector(targetId);
       
       if (targetElement && this.sidebars.has(targetElement.id)) {
         event.preventDefault();
         const sidebar = this.sidebars.get(targetElement.id);
+        console.log('✅ Found sidebar for trigger, toggling:', targetElement.id);
         sidebar.toggle(true);
+      } else {
+        console.log('❌ Sidebar not found for trigger:', targetId, 'available sidebars:', Array.from(this.sidebars.keys()));
       }
     });
+    console.log('✅ Trigger event listeners set up');
   }
 
   initializeModalBackground() {
+    console.log('🖼️ Setting up modal background event listeners...');
     document.addEventListener('click', (event) => {
       if (event.target.id === 'sidebar-modal-background') {
         const targetId = event.target.dataset.sidebarTarget;
@@ -413,10 +561,12 @@ class SimpleSidebarManager {
         
         if (targetElement && this.sidebars.has(targetId)) {
           const sidebar = this.sidebars.get(targetId);
+          console.log('🖱️ Modal background clicked, closing sidebar:', targetId);
           sidebar.close(true);
         }
       }
     });
+    console.log('✅ Modal background event listeners set up');
   }
 
   // Public API methods
@@ -427,7 +577,10 @@ class SimpleSidebarManager {
    * @returns {SimpleSidebar|undefined} The sidebar instance or undefined
    */
   getSidebar(id) {
-    return this.sidebars.get(id);
+    console.log('🔍 Getting sidebar:', id);
+    const sidebar = this.sidebars.get(id);
+    console.log('📋 Sidebar found:', !!sidebar);
+    return sidebar;
   }
 
   /**
@@ -435,6 +588,7 @@ class SimpleSidebarManager {
    * @returns {SimpleSidebar[]} Array of all sidebar instances
    */
   getAllSidebars() {
+    console.log('📋 Getting all sidebars, count:', this.sidebars.size);
     return Array.from(this.sidebars.values());
   }
 
@@ -444,9 +598,12 @@ class SimpleSidebarManager {
    * @param {boolean} [animate=true] - Whether to animate the opening
    */
   openSidebar(id, animate = true) {
+    console.log('🔓 Opening sidebar via manager:', id, 'animate:', animate);
     const sidebar = this.sidebars.get(id);
     if (sidebar) {
       sidebar.open(animate);
+    } else {
+      console.log('❌ Sidebar not found for opening:', id);
     }
   }
 
@@ -456,9 +613,12 @@ class SimpleSidebarManager {
    * @param {boolean} [animate=true] - Whether to animate the closing
    */
   closeSidebar(id, animate = true) {
+    console.log('🔒 Closing sidebar via manager:', id, 'animate:', animate);
     const sidebar = this.sidebars.get(id);
     if (sidebar) {
       sidebar.close(animate);
+    } else {
+      console.log('❌ Sidebar not found for closing:', id);
     }
   }
 
@@ -468,9 +628,12 @@ class SimpleSidebarManager {
    * @param {boolean} [animate=true] - Whether to animate the transition
    */
   toggleSidebar(id, animate = true) {
+    console.log('🔄 Toggling sidebar via manager:', id, 'animate:', animate);
     const sidebar = this.sidebars.get(id);
     if (sidebar) {
       sidebar.toggle(animate);
+    } else {
+      console.log('❌ Sidebar not found for toggling:', id);
     }
   }
 
@@ -479,8 +642,10 @@ class SimpleSidebarManager {
    * @param {boolean} [animate=true] - Whether to animate the closing
    */
   closeAllSidebars(animate = true) {
+    console.log('🔒 Closing all sidebars via manager, animate:', animate);
     this.sidebars.forEach(sidebar => {
       if (sidebar.state === 'open') {
+        console.log('🔒 Closing open sidebar:', sidebar.element.id);
         sidebar.close(animate);
       }
     });
@@ -492,13 +657,15 @@ class SimpleSidebarManager {
    * @returns {SimpleSidebar|null} The new sidebar instance or null
    */
   addSidebar(element) {
+    console.log('➕ Adding new sidebar to manager:', element.id);
     if (!element.id) {
-      console.error('Sidebar element must have an id');
+      console.error('❌ Sidebar element must have an id');
       return null;
     }
 
     const sidebar = new SimpleSidebar(element);
     this.sidebars.set(element.id, sidebar);
+    console.log('✅ Sidebar added to manager:', element.id);
     return sidebar;
   }
 
@@ -507,15 +674,20 @@ class SimpleSidebarManager {
    * @param {string} id - The sidebar ID to remove
    */
   removeSidebar(id) {
+    console.log('➖ Removing sidebar from manager:', id);
     const sidebar = this.sidebars.get(id);
     if (sidebar) {
       sidebar.close(false);
       this.sidebars.delete(id);
+      console.log('✅ Sidebar removed from manager:', id);
+    } else {
+      console.log('❌ Sidebar not found for removal:', id);
     }
   }
 }
 
 // Create global instance
+console.log('🌍 Creating global SimpleSidebarManager instance...');
 const sidebarManager = new SimpleSidebarManager();
 
 // Export for external use
@@ -524,11 +696,12 @@ export default sidebarManager;
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
+  console.log('⏳ DOM is still loading, waiting for DOMContentLoaded...');
   document.addEventListener('DOMContentLoaded', () => {
     // Sidebar manager is already initialized in its constructor
-    console.log('SimpleSidebar initialized');
+    console.log('✅ SimpleSidebar initialized on DOMContentLoaded');
   });
 } else {
   // DOM is already ready
-  console.log('SimpleSidebar initialized');
+  console.log('✅ SimpleSidebar initialized immediately - DOM was already ready');
 }
