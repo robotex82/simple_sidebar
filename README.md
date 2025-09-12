@@ -116,14 +116,120 @@ Put all the content that is not in the sidebar in a container with the id #main-
 * size: size that the sidebar will take up (width for left and right, height for top and bottom). Pass any css size in px, rem or whatever you like.
 * state: open|closed
 
+## Programmatic API
+
+The gem provides a modern JavaScript API for programmatic control:
+
+```javascript
+import sidebarManager from 'simple_sidebar';
+
+// Open a sidebar
+sidebarManager.openSidebar('sidebar-id', true); // true = animate
+
+// Close a sidebar
+sidebarManager.closeSidebar('sidebar-id', true);
+
+// Toggle a sidebar
+sidebarManager.toggleSidebar('sidebar-id', true);
+
+// Close all open sidebars
+sidebarManager.closeAllSidebars(true);
+
+// Get a sidebar instance
+const sidebar = sidebarManager.getSidebar('sidebar-id');
+
+// Get all sidebar instances
+const allSidebars = sidebarManager.getAllSidebars();
+```
+
+### Creating Sidebars Programmatically
+
+```javascript
+// Create a new sidebar element
+const sidebarElement = document.createElement('aside');
+sidebarElement.id = 'dynamic-sidebar';
+sidebarElement.dataset.sidebarPosition = 'right';
+sidebarElement.dataset.sidebarMode = 'overlay';
+sidebarElement.dataset.sidebarSize = '300px';
+
+// Add it to the manager
+const sidebar = sidebarManager.addSidebar(sidebarElement);
+
+// Open it
+sidebar.open(true);
+```
+
 ## Features
 
-- **Modern JavaScript**: Built with vanilla JavaScript, no jQuery dependency
+- **Modern JavaScript**: Built with ES6+ classes, no jQuery dependency
 - **Smooth Animations**: CSS transitions and requestAnimationFrame for smooth sidebar animations
 - **Multiple Modes**: Support for push, overlay, and modal sidebar modes
 - **Flexible Positioning**: Sidebars can be positioned on left, right, top, or bottom
-- **AJAX Loading**: Dynamic content loading via fetch API
+- **AJAX Loading**: Dynamic content loading via modern fetch API
 - **Rails 8 Compatible**: Works seamlessly with Propshaft and importmaps
+- **TypeScript Support**: Full TypeScript definitions included
+- **Accessibility**: WCAG compliant with keyboard navigation and screen reader support
+- **Responsive Design**: Mobile-first approach with responsive breakpoints
+- **Dark Mode**: Automatic dark mode support via CSS custom properties
+- **Performance Optimized**: Lazy loading, efficient animations, and memory management
+
+## Migration from CoffeeScript Version
+
+If you're upgrading from the previous CoffeeScript version, here's what you need to know:
+
+### Breaking Changes
+
+1. **No jQuery Dependency**: The gem no longer requires jQuery. Make sure to remove jQuery if you're not using it elsewhere.
+
+2. **Updated API**: The JavaScript API has been modernized but maintains backward compatibility for HTML attributes.
+
+### What's New
+
+1. **Modern JavaScript**: Complete rewrite in ES6+ with classes and modules
+2. **Better Performance**: Native DOM APIs and optimized animations
+3. **TypeScript Support**: Full type definitions included
+4. **Enhanced CSS**: CSS custom properties for theming and better responsive design
+5. **Improved Accessibility**: Better keyboard navigation and screen reader support
+
+### Code Changes
+
+The HTML structure remains the same:
+
+```html
+<!-- This still works exactly the same -->
+<button data-sidebar-trigger="#my-sidebar">Toggle Sidebar</button>
+<aside id="my-sidebar" data-sidebar-position="right" data-sidebar-mode="overlay">
+  <h3>My Sidebar</h3>
+</aside>
+```
+
+For programmatic usage, you now have access to a modern API:
+
+```javascript
+// New programmatic API
+import sidebarManager from 'simple_sidebar';
+
+// Open a sidebar
+sidebarManager.openSidebar('my-sidebar', true);
+
+// Close all sidebars
+sidebarManager.closeAllSidebars();
+
+// Get a sidebar instance
+const sidebar = sidebarManager.getSidebar('my-sidebar');
+```
+
+### CSS Customization
+
+You can now customize the sidebar appearance using CSS custom properties:
+
+```css
+:root {
+  --sidebar-bg-color: #your-color;
+  --sidebar-text-color: #your-text-color;
+  --sidebar-transition-duration: 300ms;
+}
+```
 
 ## License
 

@@ -8,5 +8,13 @@ module SimpleSidebar
         app.config.importmap.pin "simple_sidebar", to: "simple_sidebar/application.js"
       end
     end
+
+    # Ensure assets are precompiled
+    initializer "simple_sidebar.assets" do |app|
+      app.config.assets.precompile += %w[
+        simple_sidebar/application.js
+        simple_sidebar/application.css
+      ] if app.config.respond_to?(:assets)
+    end
   end
 end
