@@ -42,14 +42,8 @@ EOF
 bundle install
 
 # install importmaps
-bin/rails importmap:install
-rm config/initializers/assets.rb
-
-# Add simple_sidebar to importmap
-echo 'pin "simple_sidebar", to: "simple_sidebar/application.js"' >> config/importmap.rb
-
-# Add simple_sidebar import to application.js
-echo 'import "simple_sidebar"' >> app/javascript/application.js
+rails importmap:install
+# rm config/initializers/assets.rb
 
 # install turbo-rails
 bin/rails turbo:install
