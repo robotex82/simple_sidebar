@@ -1,13 +1,32 @@
-
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+# Specify your gem's dependencies in rao-component.gemspec.
 gemspec
 
-gem 'rails', '8.0.2.1'
-gem 'sqlite3', '~> 2.1'
-gem 'bootsnap'
-gem 'guard-rspec'
-gem 'rspec-rails'
-gem 'capybara'
-gem 'selenium-webdriver'
-gem 'importmap-rails'
+gem "rails", ">= 8.0"
+
+gem "puma"
+
+gem "sqlite3"
+
+gem "propshaft"
+
+# Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+gem "rubocop-rails-omakase", require: false
+
+# Start debugger with binding.b [https://github.com/ruby/debug]
+# gem "debug", ">= 1.0.0"
+
+group :development, :test do
+  gem "bootsnap"
+  gem "capybara"
+  gem "factory_bot_rails"
+  gem "guard-bundler"
+  gem "guard-rspec"
+  gem "pry-rails"
+  gem "rspec-rails"
+  gem "selenium-webdriver"
+end
+
+gem "importmap-rails"
+gem "turbo-rails"
