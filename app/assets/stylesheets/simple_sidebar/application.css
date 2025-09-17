@@ -1,8 +1,5 @@
 /* SimpleSidebar CSS Variables */
 :root {
-  --sidebar-bg-color: #ffffff;
-  --sidebar-text-color: #333333;
-  --sidebar-border-color: #e0e0e0;
   --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --sidebar-z-index: 3000;
   --modal-z-index: 2000;
@@ -16,9 +13,6 @@
 /* Dark theme variables */
 @media (prefers-color-scheme: dark) {
   :root {
-    --sidebar-bg-color: #1f2937;
-    --sidebar-text-color: #f9fafb;
-    --sidebar-border-color: #374151;
     --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   }
 }
@@ -29,12 +23,9 @@
   position: fixed;
   display: none;
   z-index: var(--sidebar-z-index);
-  background-color: var(--sidebar-bg-color);
-  color: var(--sidebar-text-color);
   box-shadow: var(--sidebar-shadow);
   transition: all var(--sidebar-transition-duration) var(--sidebar-transition-timing);
   padding: var(--sidebar-padding);
-  border-radius: var(--sidebar-border-radius);
   box-sizing: border-box;
 }
 
@@ -57,7 +48,6 @@
   top: 0;
   left: 0;
   overflow-y: auto;
-  border-right: 1px solid var(--sidebar-border-color);
 }
 
 .sidebar-right {
@@ -65,7 +55,6 @@
   top: 0;
   right: 0;
   overflow-y: auto;
-  border-left: 1px solid var(--sidebar-border-color);
 }
 
 .sidebar-top {
@@ -73,7 +62,6 @@
   left: 0;
   top: 0;
   overflow-x: auto;
-  border-bottom: 1px solid var(--sidebar-border-color);
 }
 
 .sidebar-bottom {
@@ -81,7 +69,6 @@
   left: 0;
   bottom: 0;
   overflow-x: auto;
-  border-top: 1px solid var(--sidebar-border-color);
 }
 
 /* Main content area */
@@ -115,8 +102,7 @@
 }
 
 [data-sidebar-trigger]:focus {
-  outline: 2px solid var(--sidebar-bg-color);
-  outline-offset: 2px;
+  /* Focus styles removed */
 }
 
 /* Responsive adjustments */
@@ -159,14 +145,12 @@
 
 /* Focus management for accessibility */
 .sidebar:focus-within {
-  outline: 2px solid var(--sidebar-bg-color);
-  outline-offset: -2px;
+  /* Focus outline styles removed */
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   :root {
-    --sidebar-border-color: #000000;
     --modal-bg: rgba(0, 0, 0, 0.8);
   }
 }
