@@ -1,10 +1,8 @@
-/**
- * SimpleSidebar / SimpleSidebarManager — Turbo Rails–safe version
- * Keeps the original API + data attributes + global `sidebarManager`.
- * Works across Turbo Drive navigations without duplicate initialization.
- */
+// show a greeting on load (support turbo)
+document.addEventListener("turbo:load", function() {
+  console.log("[SimpleSidebar] ❤️");
+});
 
-// ---------------- SimpleSidebar ----------------
 class SimpleSidebar {
   constructor(element) {
     console.log('🔧 SimpleSidebar constructor called for:', element.id);
